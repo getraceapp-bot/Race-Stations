@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>RACE Station Package</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@400;500;600&display=swap');
+:root{
+  --or:#E8722A;--or-d:#C45E1E;--or-dim:rgba(232,114,42,0.12);--or-brd:rgba(232,114,42,0.28);
+  --bg:#0A0A0A;--bg2:#141414;--bg3:#1C1C1C;--bg4:#262626;
+  --txt:#FFF;--txt2:#909090;--txt3:#444;
+  --grn:#00D68F;--grn-dim:rgba(0,214,143,0.1);--grn-brd:rgba(0,214,143,0.22);
+  --brd:rgba(255,255,255,0.07);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 15% 0%,rgba(232,114,42,0.07) 0%,transparent 55%),
+             radial-gradient(ellipse at 85% 100%,rgba(0,214,143,0.05) 0%,transparent 50%)}
+/* LANG BAR */
+#lang-bar{display:flex;gap:6px;padding:14px 16px 0;justify-content:flex-end;align-items:center}
+.lp{padding:5px 12px;border-radius:20px;border:1px solid var(--brd);background:var(--bg3);font-size:11px;font-weight:600;cursor:pointer;color:var(--txt2)}
+.lp.on{border-color:var(--or);background:var(--or-dim);color:var(--or)}
+/* HEADER */
+.hdr{padding:18px 16px 6px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-ico{width:40px;height:40px;background:var(--or);border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;box-shadow:0 4px 14px rgba(232,114,42,0.3)}
+.logo-txt{font-family:'Syne',sans-serif;font-weight:800;font-size:20px}
+.badge-ok{display:inline-flex;align-items:center;gap:5px;background:var(--grn-dim);border:1px solid var(--grn-brd);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--grn);font-weight:700}
+/* STATION */
+.stn-hero{padding:16px 16px 12px}
+.stn-nm{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px;line-height:1.1;margin-bottom:4px}
+.stn-meta{font-size:12px;color:var(--txt2);display:flex;gap:12px;flex-wrap:wrap}
+/* DIVIDER */
+.divider{margin:6px 16px 12px;display:flex;align-items:center;gap:10px}
+.divider-line{flex:1;height:1px;background:var(--brd)}
+.divider-txt{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.5px;white-space:nowrap}
+/* OWNER CARD */
+.ow-card{margin:0 16px 8px;border-radius:20px;overflow:hidden;background:linear-gradient(145deg,#16100a,#0a0a0a);border:1px solid var(--or-brd);box-shadow:0 8px 36px rgba(232,114,42,0.1);position:relative}
+.ow-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--or),#f5a623,var(--or))}
+.ow-top{padding:16px 16px 12px;border-bottom:1px solid rgba(232,114,42,0.1);display:flex;align-items:flex-start;justify-content:space-between}
+.ow-role{font-size:10px;font-weight:800;color:var(--or);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.ow-name{font-family:'Syne',sans-serif;font-size:19px;font-weight:800}
+.ow-sub{font-size:12px;color:var(--txt2);margin-top:3px}
+.ow-crown{font-size:30px}
+/* CREDS */
+.creds{padding:12px 16px;display:flex;flex-direction:column;gap:9px}
+.cr{display:flex;align-items:center;gap:10px}
+.cr-ico{width:34px;height:34px;border-radius:9px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.cr-body{flex:1;min-width:0}
+.cr-lbl{font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px}
+.cr-val{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-val.pw{color:var(--or)}
+.cr-val.blur{filter:blur(5px);user-select:none}
+.cr-val.grn{color:var(--grn);font-size:12px}
+.copy-btn{width:32px;height:32px;border-radius:8px;background:var(--bg4);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;flex-shrink:0}
+.copy-btn:active{background:var(--or)}
+.eye-btn{width:32px;height:32px;border-radius:8px;background:var(--bg4);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;flex-shrink:0}
+/* INSTALL */
+.inst-box{margin:0 16px 16px;background:var(--bg3);border-radius:12px;padding:12px 14px;border:1px solid var(--brd)}
+.inst-title{font-size:12px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.inst-os{margin-bottom:9px}
+.inst-os:last-child{margin-bottom:0}
+.inst-os-name{font-size:11px;font-weight:700;color:var(--or);margin-bottom:4px}
+.inst-step{font-size:11px;color:var(--txt2);line-height:1.7;display:flex;gap:7px}
+.inst-step b{color:var(--txt3);font-weight:700;flex-shrink:0}
+/* HANDOFF */
+.handoff{margin:0 16px 8px;background:linear-gradient(135deg,#0a1a12,#060e09);border:1px solid var(--grn-brd);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:flex-start}
+.handoff-ico{font-size:26px;flex-shrink:0;margin-top:2px}
+.handoff h4{font-size:13px;font-weight:700;color:var(--grn);margin-bottom:4px}
+.handoff p{font-size:12px;color:var(--txt2);line-height:1.6}
+/* SURPRISE */
+.surprise-card{margin:14px 16px 4px;border-radius:18px;overflow:hidden;position:relative;background:linear-gradient(135deg,#0d0820,#100a1a,#0a0a14);border:1px solid rgba(138,43,226,0.3);box-shadow:0 8px 40px rgba(100,20,200,0.15)}
+.surprise-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8a2be2,#e8722a,#00d68f,#8a2be2);background-size:200% 100%;animation:shimmer 3s linear infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.s-stars{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden}
+.s-star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle var(--d,2s) var(--delay,0s) infinite}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.8;transform:scale(1)}}
+.s-inner{padding:20px 18px 22px;display:flex;flex-direction:column;gap:12px;position:relative;z-index:1}
+.s-top{display:flex;align-items:flex-start;gap:14px}
+.s-emoji{font-size:38px;line-height:1;flex-shrink:0;filter:drop-shadow(0 0 12px rgba(138,43,226,0.6))}
+.s-pre{font-size:10px;font-weight:800;color:rgba(138,43,226,0.9);text-transform:uppercase;letter-spacing:2px;margin-bottom:5px}
+.s-headline{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;line-height:1.25;background:linear-gradient(135deg,#fff 30%,rgba(180,100,255,0.9));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s-items{display:flex;flex-direction:column;gap:7px}
+.s-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:9px 12px}
+.s-item-ico{font-size:18px;flex-shrink:0}
+.s-item-txt{font-size:12px;color:rgba(255,255,255,0.75);line-height:1.4}
+.s-item-txt strong{color:#fff;font-weight:700}
+.s-footer{display:flex;align-items:center;gap:8px;padding-top:4px;border-top:1px solid rgba(255,255,255,0.06)}
+.s-pulse{width:8px;height:8px;border-radius:50%;background:#8a2be2;flex-shrink:0;animation:glow 2s infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 4px rgba(138,43,226,0.4)}50%{box-shadow:0 0 12px rgba(138,43,226,0.9)}}
+.s-footer-txt{font-size:11px;color:rgba(255,255,255,0.4);font-style:italic}
+/* EMP CARDS */
+.cards{padding:0 16px;display:flex;flex-direction:column;gap:12px;margin-bottom:50px}
+.ec{border-radius:16px;overflow:hidden;background:linear-gradient(145deg,#141414,#0d0d0d);border:1px solid var(--brd);box-shadow:0 4px 20px rgba(0,0,0,.3);position:relative}
+.ec::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(232,114,42,.5),transparent)}
+.ec-top{padding:13px 15px 10px;border-bottom:1px solid var(--brd);display:flex;align-items:flex-start;justify-content:space-between}
+.ec-num{font-size:10px;color:var(--or);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.ec-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800}
+.ec-stn{font-size:11px;color:var(--txt2);margin-top:2px}
+.ec-status{display:flex;align-items:center;gap:5px;background:var(--grn-dim);border:1px solid var(--grn-brd);border-radius:20px;padding:3px 9px;font-size:10px;color:var(--grn);font-weight:700;white-space:nowrap}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--grn);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.lrows{padding:0 15px 10px;display:flex;flex-direction:column;gap:6px}
+.lr{background:var(--bg3);border-radius:9px;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--brd)}
+.lr-left{display:flex;align-items:center;gap:8px}
+.lr-ico{font-size:13px}
+.lr-lbl{font-size:11px;color:var(--txt2)}
+.lr-url{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600}
+.lr-url.g{color:var(--grn)}
+.lr-url.o{color:var(--or)}
+.lr-url.dim{color:var(--txt3);font-style:italic}
+.lr-copy{width:26px;height:26px;border-radius:6px;background:var(--bg4);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;flex-shrink:0}
+.lr-copy:active{background:var(--or)}
+.qr-row{padding:0 15px 12px;display:flex;align-items:center;gap:12px}
+.qr-wrap{background:#fff;border-radius:8px;padding:5px;flex-shrink:0;width:54px;height:54px;display:flex;align-items:center;justify-content:center}
+.qr-hint{font-size:11px;color:var(--txt2);line-height:1.5}
+.send-row{padding:0 15px 13px;display:flex;gap:8px}
+.btn-wa{flex:2;padding:12px 8px;background:linear-gradient(135deg,#0d2410,#051508);border:1px solid rgba(37,211,102,.25);border-radius:11px;color:#25D366;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn-wa:active{background:#25D366;color:#fff}
+.btn-more{flex:1;padding:12px;background:var(--bg3);border:1px solid var(--brd);border-radius:11px;color:var(--txt2);font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer}
+.btn-more:active{border-color:var(--or);color:var(--or)}
+/* SHARE SHEET */
+#ss-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:flex-end;justify-content:center;animation:fi .2s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.ss{background:var(--bg2);border-radius:24px 24px 0 0;padding:0 0 40px;width:100%;max-width:430px;animation:su .3s cubic-bezier(.32,1.2,.5,1)}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.ss-handle{width:36px;height:4px;background:var(--bg4);border-radius:2px;margin:12px auto 0}
+.ss-hd{padding:14px 18px 12px;border-bottom:1px solid var(--brd)}
+.ss-nm{font-family:'Syne',sans-serif;font-size:17px;font-weight:800}
+.ss-sub{font-size:12px;color:var(--txt2);margin-top:2px}
+.ss-prev{margin:12px 16px;background:var(--bg3);border:1px solid var(--brd);border-radius:13px;padding:12px;position:relative;overflow:hidden}
+.ss-prev::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--or),var(--grn))}
+.ss-prev-lbl{font-size:10px;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.ss-prev-txt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--txt2);line-height:1.7;white-space:pre-wrap;max-height:100px;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,black 40%,transparent);mask-image:linear-gradient(to bottom,black 40%,transparent)}
+.ss-opts{padding:0 16px;display:flex;flex-direction:column;gap:7px}
+.ss-opt{padding:13px 14px;border-radius:13px;border:1px solid var(--brd);background:var(--bg3);cursor:pointer;display:flex;align-items:center;gap:12px}
+.ss-opt:active{opacity:.8}
+.ss-ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ss-ico.wa{background:linear-gradient(135deg,#0d2410,#051508)}
+.ss-ico.tg{background:linear-gradient(135deg,#003d5c,#001a2e)}
+.ss-ico.sm,.ss-ico.cp{background:var(--bg4)}
+.ss-opt h5{font-size:13px;font-weight:700}
+.ss-opt p{font-size:11px;color:var(--txt2);margin-top:1px}
+.ss-cancel-btn{margin:10px 16px 0;width:calc(100% - 32px);padding:14px;background:var(--bg3);border:1px solid var(--brd);border-radius:13px;color:var(--txt2);font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer}
+/* NO DATA */
+.no-data{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:16px;padding:40px;text-align:center}
+.no-data h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--txt2)}
+.no-data p{font-size:14px;color:var(--txt3);line-height:1.6}
+/* TOAST */
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--grn);color:#000;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+#toast.on{opacity:1}
+@media print{#lang-bar,#ss-ov,#toast,.send-row{display:none!important}.ec,.ow-card{break-inside:avoid;border:1px solid #333;margin-bottom:10px}body::before{display:none}}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<!-- NO DATA SCREEN -->
+<div id="no-data-screen" class="no-data" style="display:none">
+  <div style="font-size:56px">🔗</div>
+  <h2>No station data found</h2>
+  <p>This link is missing station information.<br>Please contact RACE support at support@race.iq</p>
+</div>
+
+<!-- PACKAGE -->
+<div id="pkg" style="display:none">
+  <div id="lang-bar">
+    <div class="lp on" onclick="setLang('en')">EN</div>
+    <div class="lp" onclick="setLang('ku')">کوردی</div>
+    <div class="lp" onclick="setLang('ar')">عربي</div>
+  </div>
+  <div class="hdr">
+    <div class="logo"><div class="logo-ico">R</div><div class="logo-txt">RACE</div></div>
+    <div class="badge-ok" id="el-approved">✅ Approved Station</div>
+  </div>
+  <div class="stn-hero">
+    <div class="stn-nm" id="el-stn-name"></div>
+    <div class="stn-meta"><span>📍 Erbil</span><span style="color:var(--or)">⚡ <span id="el-active">Active</span></span></div>
+  </div>
+  <div class="divider"><div class="divider-line"></div><div class="divider-txt" id="el-owner-sec">👑 Owner Access</div><div class="divider-line"></div></div>
+  <div class="ow-card">
+    <div class="ow-top">
+      <div>
+        <div class="ow-role" id="el-owner-role">Station Owner</div>
+        <div class="ow-name" id="el-owner-name"></div>
+        <div class="ow-sub" id="el-owner-stn"></div>
+      </div>
+      <div class="ow-crown">👑</div>
+    </div>
+    <div class="creds">
+      <div class="cr">
+        <div class="cr-ico">🌐</div>
+        <div class="cr-body"><div class="cr-lbl" id="el-portal-lbl">Owner Portal</div><div class="cr-val grn">org.getrace.app/login</div></div>
+        <div class="copy-btn" onclick="cp('https://org.getrace.app/login','Copied!')">📋</div>
+      </div>
+      <div class="cr">
+        <div class="cr-ico">📧</div>
+        <div class="cr-body"><div class="cr-lbl" id="el-email-lbl">Email</div><div class="cr-val" id="el-owner-email"></div></div>
+        <div class="copy-btn" onclick="cp(document.getElementById('el-owner-email').textContent,'Copied!')">📋</div>
+      </div>
+      <div class="cr">
+        <div class="cr-ico">🔑</div>
+        <div class="cr-body"><div class="cr-lbl" id="el-pw-lbl">Password</div><div class="cr-val pw blur" id="el-owner-pw"></div></div>
+        <div class="eye-btn" onclick="toggleBlur('el-owner-pw',this)">👁</div>
+        <div class="copy-btn" onclick="cp(document.getElementById('el-owner-pw').textContent,'Copied!')">📋</div>
+      </div>
+    </div>
+    <div class="inst-box">
+      <div class="inst-title">📲 <span id="el-inst-title">Add to Home Screen — works like an app</span></div>
+      <div class="inst-os">
+        <div class="inst-os-name">🍎 iPhone (Safari)</div>
+        <div class="inst-step"><b>1.</b><span id="el-ios1">Open org.getrace.app/login in Safari</span></div>
+        <div class="inst-step"><b>2.</b><span id="el-ios2">Tap the Share button (box with arrow ↑) at the bottom</span></div>
+        <div class="inst-step"><b>3.</b><span id="el-ios3">Tap "Add to Home Screen" then tap Add ✓</span></div>
+      </div>
+      <div class="inst-os">
+        <div class="inst-os-name">🤖 Android (Chrome)</div>
+        <div class="inst-step"><b>1.</b><span id="el-and1">Open org.getrace.app/login in Chrome</span></div>
+        <div class="inst-step"><b>2.</b><span id="el-and2">Tap the 3-dot menu (⋮) at top right</span></div>
+        <div class="inst-step"><b>3.</b><span id="el-and3">Tap "Add to Home Screen" then tap Add ✓</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="handoff" style="margin-top:12px">
+    <div class="handoff-ico">👇</div>
+    <div>
+      <h4 id="el-handoff-title">Send each card below to your employee</h4>
+      <p id="el-handoff-body">Every employee has their own login card below. Tap the green Send button on each card and send it directly to that employee on WhatsApp.</p>
+    </div>
+  </div>
+  <!-- SURPRISE -->
+  <div class="surprise-card">
+    <div class="s-stars" id="stars"></div>
+    <div class="s-inner">
+      <div class="s-top">
+        <div class="s-emoji">🎁</div>
+        <div>
+          <div class="s-pre" id="el-surp-pre">Coming your way</div>
+          <div class="s-headline" id="el-surp-head">This is just the beginning.<br>We have surprises ready for you.</div>
+        </div>
+      </div>
+      <div class="s-items">
+        <div class="s-item"><div class="s-item-ico">🏆</div><div class="s-item-txt" id="el-s1"><strong>Loyalty Milestone Rewards</strong> — your best customers get rewarded, they come back more</div></div>
+        <div class="s-item"><div class="s-item-ico">📊</div><div class="s-item-txt" id="el-s2"><strong>Your Station Live Dashboard</strong> — see every transaction, every driver, every dinar in real time</div></div>
+        <div class="s-item"><div class="s-item-ico">🚗</div><div class="s-item-txt" id="el-s3"><strong>Fleet Partnerships</strong> — companies send their entire vehicle fleet to fuel exclusively at your station</div></div>
+        <div class="s-item"><div class="s-item-ico">🛡</div><div class="s-item-txt" id="el-s4"><strong>Emergency Roadside Service</strong> — RACE drivers stuck on the road get sent to you first</div></div>
+      </div>
+      <div class="s-footer"><div class="s-pulse"></div><div class="s-footer-txt" id="el-s-footer">RACE is growing fast. You are now part of it.</div></div>
+    </div>
+  </div>
+  <div class="divider" style="margin-top:16px"><div class="divider-line"></div><div class="divider-txt" id="el-emp-sec">👤 Employee Cards</div><div class="divider-line"></div></div>
+  <div class="cards" id="cards-wrap"></div>
+</div>
+
+<!-- SHARE SHEET -->
+<div id="ss-ov" style="display:none" onclick="closeSS(event)">
+  <div class="ss">
+    <div class="ss-handle"></div>
+    <div class="ss-hd"><div class="ss-nm" id="ss-name"></div><div class="ss-sub" id="ss-sub"></div></div>
+    <div class="ss-prev"><div class="ss-prev-lbl" id="el-prev-lbl">Message Preview</div><div class="ss-prev-txt" id="ss-prev-txt"></div></div>
+    <div class="ss-opts">
+      <div class="ss-opt" onclick="sendVia('wa')"><div class="ss-ico wa"><svg width="22" height="22" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div><div><h5 style="color:#25D366" id="el-wa">Send via WhatsApp</h5><p id="el-wa-s">Opens WhatsApp with message ready</p></div></div>
+      <div class="ss-opt" onclick="sendVia('tg')"><div class="ss-ico tg"><svg width="22" height="22" viewBox="0 0 24 24" fill="#229ED9"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div><div><h5 style="color:#229ED9" id="el-tg">Send via Telegram</h5><p id="el-tg-s">Opens Telegram with message ready</p></div></div>
+      <div class="ss-opt" onclick="sendVia('sms')"><div class="ss-ico sm">💬</div><div><h5 id="el-sms">Send via SMS</h5><p id="el-sms-s">Opens your phone messaging app</p></div></div>
+      <div class="ss-opt" onclick="sendVia('copy')"><div class="ss-ico cp">📋</div><div><h5 id="el-copy">Copy Message</h5><p id="el-copy-s">Paste anywhere</p></div></div>
+    </div>
+    <button class="ss-cancel-btn" onclick="closeSS()" id="el-cancel">Cancel</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+var PEMP='https://pos.getrace.app/login';
+var POWN='https://org.getrace.app/login';
+var lang='en', activeIdx=0;
+var D={station:'',training:'',owner:{name:'',email:'',password:''},emps:[]};
+
+var TR={
+  en:{approved:'✅ Approved Station',active:'Active',ownerSec:'👑 Owner Access',ownerRole:'Station Owner',portalLbl:'Owner Portal',emailLbl:'Email',pwLbl:'Password',instTitle:'Add to Home Screen — works like an app',ios1:'Open org.getrace.app/login in Safari',ios2:'Tap the Share button (box with arrow ↑) at the bottom',ios3:'Tap "Add to Home Screen" then tap Add ✓',and1:'Open org.getrace.app/login in Chrome',and2:'Tap the 3-dot menu (⋮) at top right',and3:'Tap "Add to Home Screen" then tap Add ✓',handoffTitle:'Now send each card below to your employee 👇',handoffBody:'Every employee has their own login card below. Tap the green Send button on each card and send it directly to that employee on WhatsApp.',empSec:'👤 Employee Cards',prevLbl:'Message Preview',waBtn:'Send via WhatsApp',waSub:'Opens WhatsApp with message ready',tgBtn:'Send via Telegram',tgSub:'Opens Telegram with message ready',smsBtn:'Send via SMS',smsSub:'Opens your phone messaging app',copyBtn:'Copy Message',copySub:'Paste anywhere',cancel:'Cancel',sendBtn:'Send to Employee',moreBtn:'More ⋯',empPortalLbl:'Employee Portal',trainingLbl:'Training',trainingPending:'Link coming soon',empReady:'Ready',scanHint:'Scan with phone camera — no typing needed',empWord:'Employee',surpPre:'Coming your way',surpHead:'This is just the beginning.<br>We have surprises ready for you.',s1:'<strong>Loyalty Milestone Rewards</strong> — your best customers get rewarded, they come back more',s2:'<strong>Your Station Live Dashboard</strong> — see every transaction, every driver, every dinar in real time',s3:'<strong>Fleet Partnerships</strong> — companies send their entire vehicle fleet to fuel exclusively at your station',s4:'<strong>Emergency Roadside Service</strong> — RACE drivers stuck on the road get sent to you first',sFooter:'RACE is growing fast. You are now part of it.'},
+  ku:{approved:'✅ وێستگای پشتڕاستکراو',active:'چالاک',ownerSec:'👑 دەستگەیشتنی خاوەن',ownerRole:'خاوەنی وێستگا',portalLbl:'پۆرتاڵی خاوەن',emailLbl:'ئیمەیڵ',pwLbl:'وشەی نهێنی',instTitle:'زیادی بکە بۆ ئەکرانی سەرەکی — وەک ئەپیک کار دەکات',ios1:'org.getrace.app/login لە Safari بکەرەوە',ios2:'دووگمەی هاوبەشکردن (باکسی تیری ↑) لە خوارەوە بتەوێنە',ios3:'"Add to Home Screen" هەڵبژێرە، پاشان Add بتەوێنە ✓',and1:'org.getrace.app/login لە Chrome بکەرەوە',and2:'سێ خاڵەکان (⋮) لە باڵای ڕاستەوە بتەوێنە',and3:'"Add to Home Screen" هەڵبژێرە، پاشان Add بتەوێنە ✓',handoffTitle:'ئێستا هەر کارتێک بنێرە بۆ کارمەندەکەت 👇',handoffBody:'هەر کارمەندێک لە خوارەوە زانیاری داخلبوونی تایبەت بە خۆیەوەی هەیە. دووگمەی سەوزی ناردن لەسەر هەر کارتێک بتەوێنە و ڕاستەوخۆ بیناردەرەوە بۆ ئەو کارمەندە لە واتسئەپ.',empSec:'👤 کارتەکانی کارمەندان',prevLbl:'پێشبینینی پەیام',waBtn:'بنێرە لە واتسئەپ',waSub:'واتسئەپ دەکاتەوە، پەیامەکە ئامادەیە',tgBtn:'بنێرە لە تێلێگرام',tgSub:'تێلێگرام دەکاتەوە، پەیامەکە ئامادەیە',smsBtn:'بنێرە لە SMS',smsSub:'ئەپی پەیامکردنی مۆبایلەکەت دەکاتەوە',copyBtn:'کۆپیکردنی پەیام',copySub:'لە هەر شوێنێک بچەسپێنە',cancel:'هەڵوەشاندنەوە',sendBtn:'بنێرە بۆ کارمەند',moreBtn:'زیاتر ⋯',empPortalLbl:'پۆرتاڵی کارمەند',trainingLbl:'ڕاهێنان',trainingPending:'بەستەرەکە بەم زووانە دێت',empReady:'ئامادەیە',scanHint:'بە کامێرای مۆبایل سکان بکە — نووسین پێویست نیە',empWord:'کارمەند',surpPre:'بەم زووانە دێتەوە بۆت',surpHead:'ئەمە تەنها دەستپێکە.<br>سوپرایزمان بۆت ئامادەیە.',s1:'<strong>خەڵاتی گەیشتن بە ئاستی نوێ</strong> — باشترین کڕیارەکانت خەڵات وەردەگرن و زیاتر دەگەڕێنەوە',s2:'<strong>داشبۆردی ڕاستەوخۆی وێستگاکەت</strong> — هەر مامەڵەیەک، هەر شوفێرێک، هەر دینارێک بە کاتی ڕاستی ببینە',s3:'<strong>هاوکاری فلێت</strong> — کۆمپانیاکان هەموو ئۆتۆمبێلەکانیان دەنێرن بۆ تەنها لە وێستگاکەت پڕبکەنەوە',s4:'<strong>خزمەتگوزاری فریاکەوتن لە ڕێگا</strong> — شوفێرانی RACE کە لە ڕێگادا وەستاون، ئەوەل دەنێردرێن بۆت',sFooter:'RACE بە خێرایی گەورەتر دەبێت. تۆ ئێستا بەشێکی.'},
+  ar:{approved:'✅ محطة معتمدة',active:'نشط',ownerSec:'👑 دخول المالك',ownerRole:'مالك المحطة',portalLbl:'بوابة المالك',emailLbl:'البريد الإلكتروني',pwLbl:'كلمة المرور',instTitle:'أضفه للشاشة الرئيسية — يعمل كتطبيق',ios1:'افتح org.getrace.app/login في Safari',ios2:'اضغط زر المشاركة (مربع بسهم ↑) في الأسفل',ios3:'اضغط "Add to Home Screen" ثم Add ✓',and1:'افتح org.getrace.app/login في Chrome',and2:'اضغط النقاط الثلاث (⋮) في أعلى اليمين',and3:'اضغط "Add to Home Screen" ثم Add ✓',handoffTitle:'الآن أرسل كل بطاقة أدناه لموظفك 👇',handoffBody:'لكل موظف أدناه بيانات دخول خاصة به. اضغط زر الإرسال الأخضر على كل بطاقة وأرسلها مباشرةً لذلك الموظف عبر واتساب.',empSec:'👤 بطاقات الموظفين',prevLbl:'معاينة الرسالة',waBtn:'إرسال عبر واتساب',waSub:'يفتح واتساب والرسالة جاهزة',tgBtn:'إرسال عبر تيليغرام',tgSub:'يفتح تيليغرام والرسالة جاهزة',smsBtn:'إرسال عبر SMS',smsSub:'يفتح تطبيق الرسائل في هاتفك',copyBtn:'نسخ الرسالة',copySub:'الصقها في أي مكان',cancel:'إلغاء',sendBtn:'أرسل للموظف',moreBtn:'المزيد ⋯',empPortalLbl:'بوابة الموظف',trainingLbl:'التدريب',trainingPending:'الرابط قريباً',empReady:'جاهز',scanHint:'امسح بكاميرا الهاتف — لا حاجة للكتابة',empWord:'موظف',surpPre:'في الطريق إليك',surpHead:'هذه مجرد البداية.<br>لدينا مفاجآت تنتظرك.',s1:'<strong>مكافآت الولاء</strong> — أفضل عملاءك يكافَؤون ويعودون أكثر',s2:'<strong>لوحة تحكم مباشرة لمحطتك</strong> — كل معاملة، كل سائق، كل دينار في الوقت الحقيقي',s3:'<strong>شراكات الأسطول</strong> — شركات ترسل جميع سياراتها للتزود بالوقود حصرياً من محطتك',s4:'<strong>خدمة الإنقاذ على الطريق</strong> — سائقو RACE العالقون يُوجَّهون إليك أولاً',sFooter:'RACE ينمو بسرعة. أنت الآن جزء منه.'}
+};
+
+function T(k){return(TR[lang]&&TR[lang][k])?TR[lang][k]:(TR.en[k]||k);}
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lp').forEach(function(p,i){p.classList.toggle('on',['en','ku','ar'][i]===l);});
+  if(l==='ar')document.body.setAttribute('dir','rtl');else document.body.removeAttribute('dir');
+  applyT();renderCards();
+}
+
+function applyT(){
+  var ids=['approved','active','ownerSec','ownerRole','portalLbl','emailLbl','pwLbl','instTitle','ios1','ios2','ios3','and1','and2','and3','handoffTitle','handoffBody','empSec','prevLbl','waBtn','waSub','tgBtn','tgSub','smsBtn','smsSub','copyBtn','copySub','cancel','surpPre','surpHead','s1','s2','s3','s4','sFooter'];
+  var elMap={'approved':'el-approved','active':'el-active','ownerSec':'el-owner-sec','ownerRole':'el-owner-role','portalLbl':'el-portal-lbl','emailLbl':'el-email-lbl','pwLbl':'el-pw-lbl','instTitle':'el-inst-title','ios1':'el-ios1','ios2':'el-ios2','ios3':'el-ios3','and1':'el-and1','and2':'el-and2','and3':'el-and3','handoffTitle':'el-handoff-title','handoffBody':'el-handoff-body','empSec':'el-emp-sec','prevLbl':'el-prev-lbl','waBtn':'el-wa','waSub':'el-wa-s','tgBtn':'el-tg','tgSub':'el-tg-s','smsBtn':'el-sms','smsSub':'el-sms-s','copyBtn':'el-copy','copySub':'el-copy-s','cancel':'el-cancel','surpPre':'el-surp-pre','surpHead':'el-surp-head','s1':'el-s1','s2':'el-s2','s3':'el-s3','s4':'el-s4','sFooter':'el-s-footer'};
+  ids.forEach(function(k){
+    var el=document.getElementById(elMap[k]);
+    if(el){var v=T(k);if(v.indexOf('<')>=0)el.innerHTML=v;else el.textContent=v;}
+  });
+}
+
+function buildMsg(emp){
+  var tb='';
+  if(D.training){
+    if(lang==='ku')tb='━━━━━━━━━━━━━━━━━━━━━━\n🎓 *پێش هەموو شتێک — ڕاهێنانەکەت تەواو بکە*\n━━━━━━━━━━━━━━━━━━━━━━\n\nپێش ئەوەی داخل ببیت، ئەم ڕاهێنانەی ١٠ خولەکەی تەواو بکە:\n👉 '+D.training+'\n\nپاش تەواوکردن بروانامەی دەستکەوتن وەردەگریت ✅\n\n';
+    else if(lang==='ar')tb='━━━━━━━━━━━━━━━━━━━━━━\n🎓 *أكمل التدريب أولاً*\n━━━━━━━━━━━━━━━━━━━━━━\n\nأكمل هذا التدريب (١٠ دقائق) قبل الدخول:\n👉 '+D.training+'\n\nستحصل على شهادة بعد الإكمال ✅\n\n';
+    else tb='━━━━━━━━━━━━━━━━━━━━━━\n🎓 *COMPLETE TRAINING FIRST*\n━━━━━━━━━━━━━━━━━━━━━━\n\nBefore logging in, complete this 10-minute training:\n👉 '+D.training+'\n\nYou receive a certificate when done ✅\n\n';
+  } else {
+    if(lang==='ku')tb='━━━━━━━━━━━━━━━━━━━━━━\n🎓 *ڕاهێنان*\n━━━━━━━━━━━━━━━━━━━━━━\n\nبەستەری ڕاهێنان بەم زووانە دێتەوە.\n\n';
+    else if(lang==='ar')tb='━━━━━━━━━━━━━━━━━━━━━━\n🎓 *التدريب*\n━━━━━━━━━━━━━━━━━━━━━━\n\nرابط التدريب سيصلك قريباً.\n\n';
+    else tb='━━━━━━━━━━━━━━━━━━━━━━\n🎓 *Training*\n━━━━━━━━━━━━━━━━━━━━━━\n\nTraining link coming soon.\n\n';
+  }
+  var g,w,ct,pl,el,pwl,it,ip,ia,sl;
+  if(lang==='ku'){g='سڵاو '+emp.name+' 👋';w='ئەکاونتی RACE POS تەواو ئامادەیە بۆت.\nتۆ ئێستا کارمەندی فەرمی وێستگای *'+D.station+'* ی.';ct='🔐 *زانیاری داخلبوونەکەت*';pl='🌐 *پۆرتاڵ:*';el='📧 *ئیمەیڵ:*';pwl='🔑 *وشەی نهێنی:*';it='📱 *زیادی بکە بۆ ئەکرانی سەرەکی*';ip='🍎 iPhone: Safari بکەرەوە ← هاوبەشکردن بتەوێنە ← Add to Home Screen';ia='🤖 Android: Chrome بکەرەوە ← سێ خاڵەکان بتەوێنە ← Add to Home Screen';sl='_پشتگیری: support@race.iq_\n_RACE — '+D.station+'_';}
+  else if(lang==='ar'){g='مرحباً '+emp.name+' 👋';w='حسابك في RACE POS جاهز.\nأنت الآن وكيل رسمي لمحطة *'+D.station+'*.';ct='🔐 *بيانات تسجيل دخولك*';pl='🌐 *البوابة:*';el='📧 *البريد:*';pwl='🔑 *كلمة المرور:*';it='📱 *أضفه للشاشة الرئيسية*';ip='🍎 iPhone: افتح Safari ← اضغط Share ← Add to Home Screen';ia='🤖 Android: افتح Chrome ← اضغط ⋮ ← Add to Home Screen';sl='_للدعم: support@race.iq_\n_RACE — '+D.station+'_';}
+  else{g='Hello '+emp.name+' 👋';w='Your RACE POS account is ready.\nYou are now an official agent of *'+D.station+'*.';ct='🔐 *YOUR LOGIN CREDENTIALS*';pl='🌐 *Portal:*';el='📧 *Email:*';pwl='🔑 *Password:*';it='📱 *ADD TO HOME SCREEN*';ip='🍎 iPhone: Safari → Share ↑ → Add to Home Screen';ia='🤖 Android: Chrome → ⋮ → Add to Home Screen';sl='_Support: support@race.iq_\n_RACE — '+D.station+'_';}
+  return '🏁 *RACE*\n━━━━━━━━━━━━━━━━━━━━━━\n\n'+g+'\n\n'+w+'\n\n'+tb+'━━━━━━━━━━━━━━━━━━━━━━\n'+ct+'\n━━━━━━━━━━━━━━━━━━━━━━\n\n'+pl+'\n'+PEMP+'\n\n'+el+'\n`'+emp.email+'`\n\n'+pwl+'\n`'+emp.password+'`\n\n━━━━━━━━━━━━━━━━━━━━━━\n'+it+'\n━━━━━━━━━━━━━━━━━━━━━━\n\n'+ip+'\n'+ia+'\n\n━━━━━━━━━━━━━━━━━━━━━━\n'+sl;
+}
+
+function renderCards(){
+  var wrap=document.getElementById('cards-wrap');
+  wrap.innerHTML='';
+  D.emps.forEach(function(emp,i){
+    var tr=D.training?'<div class="lr" style="border-color:var(--or-brd);background:var(--or-dim)"><div class="lr-left"><div class="lr-ico">🎓</div><div class="lr-lbl">'+T('trainingLbl')+'</div></div><span class="lr-url o" style="max-width:155px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+D.training.replace('https://','')+'</span><div class="lr-copy" onclick="cp(\''+D.training+'\',\'Copied!\')">📋</div></div>':'<div class="lr" style="opacity:.4"><div class="lr-left"><div class="lr-ico">🎓</div><div class="lr-lbl">'+T('trainingLbl')+'</div></div><span class="lr-url dim">'+T('trainingPending')+'</span></div>';
+    var card=document.createElement('div');
+    card.className='ec';
+    card.innerHTML='<div class="ec-top"><div><div class="ec-num">'+T('empWord')+' '+(i+1)+' / '+D.emps.length+'</div><div class="ec-name">'+emp.name+'</div><div class="ec-stn">📍 '+D.station+'</div></div><div class="ec-status"><div class="dot"></div>'+T('empReady')+'</div></div><div class="creds"><div class="cr"><div class="cr-ico">📧</div><div class="cr-body"><div class="cr-lbl">'+T('emailLbl')+'</div><div class="cr-val" id="em-'+i+'">'+emp.email+'</div></div><div class="copy-btn" onclick="cp(\''+emp.email+'\',\'Copied!\')">📋</div></div><div class="cr"><div class="cr-ico">🔑</div><div class="cr-body"><div class="cr-lbl">'+T('pwLbl')+'</div><div class="cr-val pw blur" id="pw-'+i+'">'+emp.password+'</div></div><div class="eye-btn" onclick="toggleBlur(\'pw-'+i+'\',this)">👁</div><div class="copy-btn" onclick="cp(\''+emp.password+'\',\'Copied!\')">📋</div></div></div><div class="lrows"><div class="lr"><div class="lr-left"><div class="lr-ico">🌐</div><div class="lr-lbl">'+T('empPortalLbl')+'</div></div><a class="lr-url g" href="'+PEMP+'" target="_blank">pos.getrace.app/login</a><div class="lr-copy" onclick="cp(\''+PEMP+'\',\'Copied!\')">📋</div></div>'+tr+'</div><div class="qr-row"><div class="qr-wrap" id="qr-'+i+'"></div><div class="qr-hint">📱 '+T('scanHint')+'</div></div><div class="send-row"><button class="btn-wa" onclick="openSS('+i+')"><svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>'+T('sendBtn')+'</button><button class="btn-more" onclick="openSS('+i+')">'+T('moreBtn')+'</button></div>';
+    wrap.appendChild(card);
+    (function(idx){setTimeout(function(){var qd=emp.name+'\nEmail: '+emp.email+'\nPassword: '+emp.password+'\nPortal: '+PEMP+(D.training?'\nTraining: '+D.training:'');try{new QRCode(document.getElementById('qr-'+idx),{text:qd,width:44,height:44,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M});}catch(e){}},80+idx*40);})(i);
+  });
+}
+
+function toggleBlur(id,btn){var el=document.getElementById(id);if(!el)return;var b=el.classList.toggle('blur');btn.textContent=b?'👁':'🙈';}
+function cp(t,m){if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){showToast(m);});}else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast(m);}}
+function showToast(m){var el=document.getElementById('toast');el.textContent='✓ '+m;el.classList.add('on');setTimeout(function(){el.classList.remove('on');},2000);}
+function openSS(i){activeIdx=i;var emp=D.emps[i];document.getElementById('ss-name').textContent=emp.name;document.getElementById('ss-sub').textContent='📍 '+D.station;document.getElementById('ss-prev-txt').textContent=buildMsg(emp);document.getElementById('ss-ov').style.display='flex';document.body.style.overflow='hidden';}
+function closeSS(e){if(e&&e.target&&e.target.id!=='ss-ov')return;document.getElementById('ss-ov').style.display='none';document.body.style.overflow='';}
+function sendVia(m){var msg=buildMsg(D.emps[activeIdx]);var enc=encodeURIComponent(msg);document.getElementById('ss-ov').style.display='none';document.body.style.overflow='';if(m==='wa')window.open('https://wa.me/?text='+enc,'_blank');else if(m==='tg')window.open('https://t.me/share/url?url='+encodeURIComponent(PEMP)+'&text='+enc,'_blank');else if(m==='sms')window.open('sms:?body='+enc,'_blank');else if(m==='copy')cp(msg,lang==='ku'?'پەیام کۆپی کرا':lang==='ar'?'تم نسخ الرسالة':'Message copied');}
+
+window.onload=function(){
+  // Read data from URL
+  var hash=window.location.hash.replace('#','');
+  var param=new URLSearchParams(window.location.search).get('d');
+  var raw=hash||param;
+  if(!raw){document.getElementById('no-data-screen').style.display='flex';return;}
+  try{
+    var decoded=JSON.parse(atob(raw));
+    D.station=decoded.station||'';
+    D.training=decoded.training||'';
+    D.owner=decoded.owner||{name:'',email:'',password:''};
+    D.emps=decoded.emps||[];
+    if(!D.station||!D.emps.length){throw new Error('bad data');}
+  }catch(e){document.getElementById('no-data-screen').style.display='flex';return;}
+
+  document.getElementById('pkg').style.display='block';
+  document.getElementById('el-stn-name').textContent=D.station;
+  document.getElementById('el-owner-name').textContent=D.owner.name;
+  document.getElementById('el-owner-stn').textContent=D.station;
+  document.getElementById('el-owner-email').textContent=D.owner.email;
+  document.getElementById('el-owner-pw').textContent=D.owner.password;
+
+  // stars
+  var sc=document.getElementById('stars');
+  for(var s=0;s<28;s++){var star=document.createElement('div');star.className='s-star';star.style.left=Math.random()*100+'%';star.style.top=Math.random()*100+'%';star.style.setProperty('--d',(1.5+Math.random()*2.5)+'s');star.style.setProperty('--delay',(Math.random()*3)+'s');sc.appendChild(star);}
+
+  applyT();
+  renderCards();
+};
+</script>
+</body>
+</html>
